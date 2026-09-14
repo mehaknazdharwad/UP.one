@@ -18,19 +18,22 @@ export function Sla({ c, now, t }: {
     const label = done(c) ? t(state === 'met' ? 'SLA met' : state === 'late' ? 'Resolved late' : 'Unknown') : hours < 1 && left > 0 ? t('Less than 1 hour left') : hours < 48 ? `${Math.max(1, hours)} ${t(left <= 0 ? 'hours overdue' : 'hours left')}` : `${Math.ceil(Math.abs(left) / DAY)} ${t(left <= 0 ? 'days overdue' : 'days left')}`;
     return <span className={'sla sla-' + state}>{label}</span>;
 }
-export function ComplaintTable({ rows, t, now, onOpen }: {
+export function ComplaintTable({ rows, t, now, language, onOpen }: {
     rows: Complaint[];
     t: Translate;
     now: number;
+    language: Language;
     onOpen: (c: Complaint) => void;
 }) {
     if (!rows.length)
         return <div className="empty compact"><h3>{t('No matching complaints')}</h3><p>{t('Try changing your filters.')}</p></div>;
-    return <div className="table-scroll"><table className="complaint-table"><caption className="sr-only">{t('Complaints')}</caption><thead><tr>{['Complaint', 'District', 'Priority', 'Status', 'Assigned officer', 'SLA status', 'Actions'].map(s => <th scope="col" key={s}>{s === 'Actions' ? <span className="sr-only">{t(s)}</span> : t(s)}</th>)}</tr></thead><tbody>{rows.map(c => <tr key={c.id}>
+    return <div className="table-scroll"><table className="complaint-table"><caption className="sr-only">{t('Complaints')}</caption><thead><tr>{['Complaint', 'District', 'Created on', 'Priority', 'Status', 'Assigned officer', 'SLA status', 'Actions'].map(s => <th scope="col" key={s}>{s === 'Actions' ? <span className="sr-only">{t(s)}</span> : t(s)}</th>)}</tr></thead><tbody>{rows.map(c => <tr key={c.id}>
   <td><button className="case-link" onClick={() => onOpen(c)}><small>{c.id}</small><strong>{t(c.title)}</strong></button></td>
-  <td data-label={t('District')}>{t(c.district)}</td><td data-label={t('Priority')}><span className={'severity ' + c.priority.toLowerCase()}>{t(c.priority)}</span></td>
+  <td data-label={t('District')}>{t(c.district)}</td>
+  <td data-label={t('Created on')}><time dateTime={c.createdAt} title={new Date(c.createdAt).toLocaleString(locale(language), { timeZone: 'Asia/Kolkata' }) + ' IST'}>{new Date(c.createdAt).toLocaleDateString(locale(language), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}</time></td>
+  <td data-label={t('Priority')}><span className={'severity ' + c.priority.toLowerCase()}>{t(c.priority)}</span></td>
   <td data-label={t('Status')}><Status value={c.status} t={t}/></td><td data-label={t('Assigned officer')}>{c.officer || <button className="text-button" onClick={() => onOpen(c)}>{t('Assign officer')}</button>}</td>
-  <td data-label={t('SLA status')}><Sla c={c} now={now} t={t}/></td><td><button className="icon-button" aria-label={`${t('Open complaint')} ${c.id}`} onClick={() => onOpen(c)}><ChevronRight size={18}/></button></td>
+  <td className="sla-cell" data-label={t('SLA status')}><Sla c={c} now={now} t={t}/></td><td><button className="icon-button" aria-label={`${t('Open complaint')} ${c.id}`} onClick={() => onOpen(c)}><ChevronRight size={18}/></button></td>
  </tr>)}</tbody></table></div>;
 }
 export function Trend({ items, t, language, now }: {

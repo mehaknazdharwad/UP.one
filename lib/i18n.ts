@@ -21,3 +21,5 @@ export function translator(language: Language): Translate {
     return key => { const parts = key.split(' / '); if (parts.length === 2 && /[\u0900-\u097F]/.test(parts[1]))
         return language === 'hi' ? parts[1] : parts[0]; return language === 'hi' ? (dictionary[key] || key) : key; };
 }
+
+Object.assign(dictionary, { 'Created on': 'दर्ज करने की तिथि' });
