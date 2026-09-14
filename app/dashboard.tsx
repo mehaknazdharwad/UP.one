@@ -117,7 +117,7 @@ export default function Dashboard() {
         Risk,
         string,
         number
-    ][] = [['overdue', 'Overdue', m.overdue], ['near', 'Due within 48 hours', m.near], ['escalated', 'Escalated', m.escalated], ['escalation', 'Escalation required', m.escalation], ['critical', 'Critical', m.critical], ['', 'All cases', m.total]];
+    ][] = [['overdue', 'Overdue', m.overdue], ['near', 'Due within 48 hours', m.near], ['escalated', 'Escalated', m.escalated], ['escalation', 'Escalation required', m.escalation], ['critical', 'Critical', m.critical], ['active', 'Active complaints', m.active], ['completed', 'Completed cases', m.completed], ['sla-reviewed', 'Completed cases with SLA data', m.known], ['', 'All cases', m.total]];
     const hasFilters = Object.entries(filters).some(([key, value]) => value !== emptyFilters[key as keyof Filters]);
     return <div className={"shell " + (collapsed ? "sidebar-hidden" : "")}><a className="skip-link" href="#main">{t('Skip to content')}</a>
  {mobile && <button className="nav-scrim" aria-label={t('Close navigation')} onClick={() => { setMobile(false); menuRef.current?.focus(); }}/>}
@@ -133,7 +133,12 @@ export default function Dashboard() {
             setLoadError((e as Error).message);
         } }}>{t('Load sample complaints')}</button></section> : <div aria-busy={loading}>
  {view === 'Overview' && <>
- <div className="stats">{[{ label: 'Total complaints', value: m.total, sub: `${m.completed} ${t('Completed cases')}` }, { label: 'Active complaints', value: m.active, sub: t('Awaiting resolution') }, { label: 'Overdue', value: m.overdue, sub: `${m.escalation} ${t('Escalation required')}`, alert: m.overdue > 0 }, { label: 'SLA compliance', value: m.compliance === null ? '—' : `${m.compliance}%`, sub: m.known ? `${m.met} / ${m.known} ${t('of completed cases met the SLA')}` : t('No resolution dates recorded') }].map(s => <section className={'stat ' + (s.alert ? 'stat-alert' : '')} key={s.label}><h2>{t(s.label)}</h2><strong>{s.value}</strong><p>{s.sub}</p></section>)}</div>
+ <div className="stats">{[
+ { label: 'Total complaints', value: m.total, risk: '' as Risk, sub: `${m.completed} ${t('Completed cases')}`, subRisk: 'completed' as Risk },
+ { label: 'Active complaints', value: m.active, risk: 'active' as Risk, sub: t('Awaiting resolution') },
+ { label: 'Overdue', value: m.overdue, risk: 'overdue' as Risk, sub: `${m.escalation} ${t('Escalation required')}`, subRisk: 'escalation' as Risk, alert: m.overdue > 0 },
+ { label: 'SLA compliance', value: m.compliance === null ? '—' : `${m.compliance}%`, risk: 'sla-reviewed' as Risk, sub: m.known ? `${m.met} / ${m.known} ${t('of completed cases met the SLA')}` : t('No resolution dates recorded') }
+ ].map(s => <section className={'stat ' + (s.alert ? 'stat-alert' : '')} key={s.label}><h2><button className="stat-link" onClick={() => drill(s.risk)}>{t(s.label)}<ChevronRight size={14}/></button></h2><strong>{s.value}</strong>{s.subRisk ? <button className="stat-secondary" onClick={() => drill(s.subRisk!)}>{s.sub}</button> : <p>{s.sub}</p>}</section>)}</div>
  <section className="attention panel"><div className="panel-heading"><h2>{t('Needs attention')}</h2><p>{t('Counts may overlap')}</p></div><div className="attention-actions">{([['critical', 'Critical', m.critical], ['near', 'Due within 48 hours', m.near], ['unassigned', 'Unassigned', m.unassigned], ['escalated', 'Active escalations', m.escalated]] as [
                 Risk,
                 string,

@@ -1,6 +1,6 @@
 import { done, due, recurringGroups, type Complaint } from './domain';
 export const DAY = 86400000;
-export type Risk = '' | 'overdue' | 'near' | 'critical' | 'escalated' | 'unassigned' | 'escalation';
+export type Risk = '' | 'overdue' | 'near' | 'critical' | 'escalated' | 'unassigned' | 'escalation' | 'active' | 'completed' | 'sla-reviewed';
 export type Sort = 'priority' | 'oldest' | 'newest';
 export type Filters = {
     query: string;
@@ -23,6 +23,9 @@ export function slaState(c: Complaint, now = Date.now()) {
 export function matchesRisk(c: Complaint, risk: Risk, now = Date.now()) {
     if (!risk)
         return true;
+    if (risk === 'active') return !done(c);
+    if (risk === 'completed') return done(c);
+    if (risk === 'sla-reviewed') return done(c) && !!c.resolvedAt;
     if (done(c))
         return false;
     if (risk === 'critical')
