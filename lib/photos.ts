@@ -1,5 +1,5 @@
 import { env } from 'cloudflare:workers';
-export const MAX_PHOTO_BYTES=5*1024*1024;
+export const MAX_PHOTO_BYTES=4*1024*1024;
 export function bucket(){const b=(env as unknown as {BUCKET:R2Bucket}).BUCKET;if(!b)throw Error('Photo storage unavailable');return b;}
 export function imageType(bytes:Uint8Array){
  if(bytes.length<12)return null;

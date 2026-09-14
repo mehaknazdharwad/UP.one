@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "UP.one | Electrical Department",
-  description: "Electrical grievance monitoring, officer accountability and seven-day SLA management for Uttar Pradesh. Demonstration workspace.",
+  description: "Electrical grievance monitoring, officer accountability and seven-day SLA management for Uttar Pradesh.",
   other: {
     "codex-preview": "development",
   },

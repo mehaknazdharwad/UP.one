@@ -1,5 +1,5 @@
 import { authorized } from '../../../../lib/access';
-import { database } from '../../../../lib/db';
+import { complaintStore } from '../../../../lib/complaint-store';
 import { bucket } from '../../../../lib/photos';
 import type { Complaint } from '../../../../lib/domain';
 export async function GET(req:Request){
@@ -7,9 +7,9 @@ export async function GET(req:Request){
  const q=new URL(req.url).searchParams,id=q.get('complaint'),photo=q.get('photo');
  if(!id||!photo)return new Response('Not found',{status:404});
  try{
-  const row=await database().prepare('SELECT payload FROM complaints WHERE id=?').bind(id).first<{payload:string}>();
+  const row=await complaintStore().find(id);
   if(!row)return new Response('Not found',{status:404});
-  const c:Complaint=JSON.parse(row.payload);const evidence=c.history.find(h=>h.photo?.id===photo)?.photo;
+  const c:Complaint=row;const evidence=c.history.find(h=>h.photo?.id===photo)?.photo;
   if(!evidence)return new Response('Not found',{status:404});
   const object=await bucket().get(`resolution/${id}/${evidence.id}`);
   if(!object)return new Response('Photo unavailable',{status:404});

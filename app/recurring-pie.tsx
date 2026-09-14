@@ -8,7 +8,7 @@ export function RecurringPie({ items, t, onSelect }: {
 }) {
     const [focused, setFocused] = useState<string | null>(null);
     const groups = recurringGroups(items);
-    const colors = ['#17365d', '#376c98', '#6896b9', '#a1bed5', '#52677f', '#d5e1eb'];
+    const colors = ['#2B8B4B', '#D9782D', '#719879', '#C1CFAB', '#54645A', '#DCC5AA'];
     const slices = categories.map((category, i) => ({ category, count: groups.filter(g => g[0].category === category).reduce((n, g) => n + g.length, 0), color: colors[i] })).filter(s => s.count > 0);
     const total = slices.reduce((n, s) => n + s.count, 0);
     let angle = -Math.PI / 2;

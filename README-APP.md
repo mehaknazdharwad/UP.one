@@ -13,12 +13,20 @@ This is a demonstration, not an official government service. Eight sample distri
 
 Use `npm run dev` for development after local migration. `npm run build` produces a Cloudflare-compatible Worker. Use the Sites publishing workflow for the registered private deployment. No GitHub secrets or tokens are stored in source.
 
+## Vercel hosting
+
+Vercel uses `next build --webpack` and the storage adapter in `lib/vercel-env.ts`. The small demonstration dataset lives in a private Blob object; consistent reads and conditional ETag writes protect concurrent updates. Repair photos are separate private objects. This is a demo storage design, not a replacement for a production grievance database at government scale.
+
+Set `UP_DASHBOARD_PASSWORD` as a Vercel Secret. The username defaults to `mehaknazd-1657` and can be changed with `UP_DASHBOARD_USER`. The dashboard and APIs require a signed, eight-hour, HttpOnly session cookie over HTTPS; logout clears the session. Private Blob credentials are configured by the project's storage connection. Never commit environment files or sign-in details. Vercel starts with its own 15 samples; it does not migrate the original host's records.
+
+For isolated verification, set `UP_STORAGE_PREFIX` to a unique test prefix. The production default is `dashboard`. The existing Sites deployment continues using D1 and R2 through the same complaint-store interface.
+
 ## Operational rules
 
 - Deadline is the original report time plus exactly seven 24-hour days. Reopening does not reset it.
 - Due within 48 hours excludes overdue and resolved/closed cases.
 - SLA compliance is completed cases resolved by their deadline divided by completed cases with a recorded resolution date in the selected report-created-date cohort. The denominator is displayed; missing resolution dates are Unknown.
-- Officer assignment is required beyond New. New resolutions require a note and a JPEG, PNG or WebP repair photo (maximum 5 MB). Photos are saved in private R2 storage and served only when referenced by the complaint history. Reopening clears the current resolution while retaining all historical evidence. Earlier sample resolutions are labeled when no photo exists.
+- Officer assignment is required beyond New. New resolutions require a note and a JPEG, PNG or WebP repair photo (maximum 4 MB). Photos are saved in private storage and served only when referenced by the complaint history. Reopening clears the current resolution while retaining all historical evidence. Earlier sample resolutions are labeled when no photo exists.
 - Complaint location includes a required address and district, optional ward/zone and paired latitude/longitude, a map link, and an editable location section. New activities store actor, owner/location changes and previous status separately from the user's note.
 - Concurrent updates return 409 rather than silently overwriting another user's work.
 - Sample data loads only through an explicit action and is idempotent. The demo contains 15 complaints spanning every lifecycle status. On opening the app, an idempotent archival action retires the 69 unused, untouched legacy samples; custom complaints, edited samples, and uploaded evidence are retained. Archived rows remain in storage and are excluded from dashboard queries.
