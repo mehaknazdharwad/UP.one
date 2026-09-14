@@ -17,14 +17,21 @@ Use `npm run dev` for development after local migration. `npm run build` produce
 
 - Deadline is the original report time plus exactly seven 24-hour days. Reopening does not reset it.
 - Due within 48 hours excludes overdue and resolved/closed cases.
-- SLA compliance is completed cases resolved by their deadline divided by all completed cases in the report-created-date cohort.
+- SLA compliance is completed cases resolved by their deadline divided by completed cases with a recorded resolution date in the selected report-created-date cohort. The denominator is displayed; missing resolution dates are Unknown.
 - Officer assignment is required beyond New. New resolutions require a note and a JPEG, PNG or WebP repair photo (maximum 5 MB). Photos are saved in private R2 storage and served only when referenced by the complaint history. Reopening clears the current resolution while retaining all historical evidence. Earlier sample resolutions are labeled when no photo exists.
-- Complaint location includes a required address and district, optional paired latitude/longitude, a map link, and an editable location section with changes recorded in history.
+- Complaint location includes a required address and district, optional ward/zone and paired latitude/longitude, a map link, and an editable location section. New activities store actor, owner/location changes and previous status separately from the user's note.
 - Concurrent updates return 409 rather than silently overwriting another user's work.
 - Sample data loads only through an explicit action and is idempotent. The demo contains 15 complaints spanning every lifecycle status. On opening the app, an idempotent archival action retires the 69 unused, untouched legacy samples; custom complaints, edited samples, and uploaded evidence are retained. Archived rows remain in storage and are excluded from dashboard queries.
 - Recurring issues means the same category appearing in at least two complaints in the same district within the selected reporting cohort. The pie counts all complaints in those groups; its legend opens the matching cases. This is a pattern indicator, not proof of a shared root cause.
 - User-entered text remains in its original language; interface labels switch between Hindi and English.
-- The trend chart covers the most recent 30 days; all-time filters apply to totals, queues and district/category analysis.
+- The trend chart covers the most recent 30 days in five-day intervals, counting resolution transitions in history even if a case was reopened. Notes on an already resolved case do not count as additional repairs. Global search, district and reporting-period filters apply to every view.
+- Overdue means now is at or beyond the original seven-day deadline. Escalated and escalation-required queues are distinct: escalation is recorded by the department head; an overdue case is flagged for review without pretending an external notification has been sent.
+
+## Review and validation
+
+See `PRODUCT-REVIEW.md` for the assessment and retained production boundaries. Shared selectors are in `lib/operations.ts`, translations in `lib/i18n.ts`, and complaint workflows in `app/complaint-dialogs.tsx`. Inter and Noto Sans Devanagari are self-hosted with their OFL licenses.
+
+Run `node scripts/test-operations.mjs` for SLA boundaries, counts, recurring groups, Hindi search and resolution-event history. Run `node scripts/test-workflow.mjs <local-url>` only against an isolated local test database; it creates test records and exercises transitions, required images, locations, history and concurrency. Browser review covered English/Hindi, 1440/1280/768/390px layouts, 200% text, navigation, filters, the complaint lifecycle, keyboard focus, unsaved edits and error recovery.
 
 ## GitHub
 

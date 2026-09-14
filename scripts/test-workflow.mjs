@@ -38,5 +38,5 @@ const cross=await fetch(origin+'/api/complaints',{method:'POST',headers:{Origin:
 assert.equal((await fetch(origin+`/api/complaints/photo?complaint=${c.id}&photo=unknown`)).status,404);
 assert.equal((await fetch(origin+`/api/complaints/photo?complaint=UP-EL-20260001&photo=${firstPhoto}`)).status,404);
 const edited=await call('PATCH',{id:c.id,version:c.version,status:c.status,officer:c.officer,note:'Corrected site location',address:'Ward 18, repaired transformer near school',district:'Kanpur Nagar',latitude:26.4499,longitude:80.3319});
-assert.equal(edited.status,200);assert.equal(edited.data.district,'Kanpur Nagar');assert.equal(edited.data.latitude,26.4499);assert.ok(edited.data.history.at(-1).note.includes('Ward 18'));assert.equal(edited.data.resolutionPhoto.id,c.resolutionPhoto.id);
+assert.equal(edited.status,200);assert.equal(edited.data.district,'Kanpur Nagar');assert.equal(edited.data.latitude,26.4499);assert.ok(edited.data.history.at(-1).location.includes('Ward 18'));assert.equal(edited.data.resolutionPhoto.id,c.resolutionPhoto.id);
 console.log('PASS: lifecycle, required resolution image, file validation, photo retrieval, evidence retained after reopening, location validation/persistence, concurrency, history and cross-origin protection.');
