@@ -2,7 +2,6 @@ outputs
 work
 .wrangler
 .sites-runtime
-.openai
 .agents
 .codex
 dist
