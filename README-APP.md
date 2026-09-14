@@ -1,4 +1,4 @@
-# Jan Samadhan — UP Electrical Department
+# UP.one — UP Electrical Department
 
 A functional bilingual demonstration dashboard with D1-backed complaints, seven lifecycle states, officer assignments, optimistic concurrency, activity history, seven-day SLA monitoring, district/category analysis, and CSV exports.
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Jan Samadhan | UP Electrical Department",
+  title: "UP.one | Electrical Department",
   description: "Electrical grievance monitoring, officer accountability and seven-day SLA management for Uttar Pradesh. Demonstration workspace.",
   other: {
     "codex-preview": "development",
