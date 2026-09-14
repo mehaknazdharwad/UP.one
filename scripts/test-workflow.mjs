@@ -3,7 +3,11 @@ const origin=process.argv[2];if(!origin)throw Error('Pass the exact local previe
 async function call(method,body){const r=await fetch(origin+'/api/complaints',{method,headers:{'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,data:await r.json()};}
 assert.equal((await fetch(origin)).status,200);
 assert.equal((await call('POST',{action:'seed'})).status,200);
-const first=await call('GET');assert.equal(first.status,200);assert.ok(first.data.complaints.length>=84);
+assert.equal((await call('POST',{action:'curate-demo-15'})).status,200);
+assert.equal((await call('POST',{action:'curate-demo-15'})).data.archived,0);
+const first=await call('GET');assert.equal(first.status,200);assert.ok(first.data.complaints.length>=15);
+assert.equal(first.data.complaints.filter(c=>/^UP-EL-202600\d\d$/.test(c.id)).length,15);
+assert.equal(new Set(first.data.complaints.filter(c=>/^UP-EL-202600\d\d$/.test(c.id)).map(c=>c.status)).size,7);
 await call('POST',{action:'seed'});assert.equal((await call('GET')).data.complaints.length,first.data.complaints.length);
 assert.equal((await call('POST',{title:' '})).status,400);
 assert.equal((await call('POST',{title:'Invalid coordinates',category:'Transformer',district:'Lucknow',address:'Demo address',citizen:'Test',priority:'High',latitude:26})).status,400);
@@ -28,6 +32,7 @@ for(const status of ['Assigned','In progress','Resolved','Closed','Reopened','In
  if(status==='Reopened'){assert.equal(c.resolutionPhoto,null);assert.equal((await fetch(origin+`/api/complaints/photo?complaint=${c.id}&photo=${firstPhoto}`)).status,200);}
  assert.equal((await call('PATCH',{id:c.id,version:prev.version,status,officer:'Anil Kumar',note:'Stale update'})).status,409);
 }
+assert.equal((await call('POST',{action:'curate-demo-15'})).data.archived,0);
 const persisted=(await call('GET')).data.complaints.find(x=>x.id===c.id);assert.equal(persisted.version,c.version);assert.equal(persisted.history.length,9);
 const cross=await fetch(origin+'/api/complaints',{method:'POST',headers:{Origin:'https://untrusted.example','Content-Type':'application/json'},body:JSON.stringify({action:'seed'})});assert.equal(cross.status,403);
 assert.equal((await fetch(origin+`/api/complaints/photo?complaint=${c.id}&photo=unknown`)).status,404);

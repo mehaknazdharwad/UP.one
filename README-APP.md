@@ -21,7 +21,8 @@ Use `npm run dev` for development after local migration. `npm run build` produce
 - Officer assignment is required beyond New. New resolutions require a note and a JPEG, PNG or WebP repair photo (maximum 5 MB). Photos are saved in private R2 storage and served only when referenced by the complaint history. Reopening clears the current resolution while retaining all historical evidence. Earlier sample resolutions are labeled when no photo exists.
 - Complaint location includes a required address and district, optional paired latitude/longitude, a map link, and an editable location section with changes recorded in history.
 - Concurrent updates return 409 rather than silently overwriting another user's work.
-- Sample data loads only through an explicit action and is idempotent.
+- Sample data loads only through an explicit action and is idempotent. The demo contains 15 complaints spanning every lifecycle status. On opening the app, an idempotent archival action retires the 69 unused, untouched legacy samples; custom complaints, edited samples, and uploaded evidence are retained. Archived rows remain in storage and are excluded from dashboard queries.
+- Recurring issues means the same category appearing in at least two complaints in the same district within the selected reporting cohort. The pie counts all complaints in those groups; its legend opens the matching cases. This is a pattern indicator, not proof of a shared root cause.
 - User-entered text remains in its original language; interface labels switch between Hindi and English.
 - The trend chart covers the most recent 30 days; all-time filters apply to totals, queues and district/category analysis.
 

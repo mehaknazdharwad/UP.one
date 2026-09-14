@@ -1,5 +1,5 @@
 import { database } from '../../../lib/db';
-import { categories, districts, officers, seed, transitions, type Complaint } from '../../../lib/domain';
+import { categories, districts, officers, seed, demoIds, transitions, type Complaint } from '../../../lib/domain';
 import { z } from 'zod';
 import { allowed, authorized } from '../../../lib/access';
 import { boundedForm, bucket, imageType, MAX_PHOTO_BYTES } from '../../../lib/photos';
@@ -12,13 +12,20 @@ const update = z.object({id:z.string(),version:z.coerce.number().int(),status:z.
 const fail=(error:string,status=400)=>Response.json({error},{status});
 export async function GET(req:Request){
  if(!authorized(req))return fail('Sign in to access complaints. / शिकायतें देखने के लिए साइन इन करें।',401);
- try{const result=await database().prepare('SELECT payload FROM complaints ORDER BY id DESC').all<{payload:string}>();return Response.json({complaints:result.results.map(r=>JSON.parse(r.payload))},{headers:{'Cache-Control':'no-store'}});}
+ try{const result=await database().prepare("SELECT payload FROM complaints WHERE coalesce(json_extract(payload,'$.demoArchived'),0)=0 ORDER BY id DESC").all<{payload:string}>();return Response.json({complaints:result.results.map(r=>JSON.parse(r.payload))},{headers:{'Cache-Control':'no-store'}});}
  catch(e){console.error(e);return fail('Unable to load complaints. Please retry. / शिकायतें लोड नहीं हुईं। पुनः प्रयास करें।',503);}
 }
 export async function POST(req:Request){
  if(!allowed(req))return fail('Unauthorized / अनुमति नहीं है',403);
  try{
   const body=await req.json();const db=database();
+  if(body&&typeof body==='object'&&'action' in body&&body.action==='curate-demo-15'){
+   // User-requested, reversible retirement of pristine generated samples only.
+   // Custom complaints, edits, and evidence are never touched.
+   const unused=Array.from({length:84},(_,i)=>`UP-EL-${20260001+i}`).filter(id=>!demoIds.includes(id));
+   const result=await db.prepare(`UPDATE complaints SET payload=json_set(payload,'$.demoArchived',json('true'),'$.version',version+1),version=version+1 WHERE id IN (${unused.map(()=>'?').join(',')}) AND version=1 AND json_extract(payload,'$.history[0].note')=?`).bind(...unused,'Complaint received through citizen portal.').run();
+   return Response.json({archived:result.meta.changes});
+  }
   if(body&&typeof body==='object'&&'action' in body&&body.action==='seed'){
    await db.batch(seed().map(c=>db.prepare('INSERT OR IGNORE INTO complaints (id,payload,version) VALUES (?,?,1)').bind(c.id,JSON.stringify(c))));return Response.json({ok:true});
   }
