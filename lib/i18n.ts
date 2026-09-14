@@ -23,3 +23,5 @@ export function translator(language: Language): Translate {
 }
 
 Object.assign(dictionary, { 'Created on': 'दर्ज करने की तिथि' });
+
+Object.assign(dictionary, { 'Attention filter': 'ध्यान देने योग्य मामले' });
