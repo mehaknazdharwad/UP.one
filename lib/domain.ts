@@ -2,7 +2,8 @@ export const statuses = ['New','Assigned','In progress','Resolved','Closed','Reo
 export const categories = ['Power outage','Transformer','Damaged wire / pole','Streetlight','Voltage fluctuation','Other electrical'] as const;
 export const districts = ['Lucknow','Kanpur Nagar','Varanasi','Prayagraj','Agra','Gorakhpur','Meerut','Bareilly'];
 export const officers = ['Anil Kumar','Priya Singh','Rajesh Verma','Neha Sharma','Vikram Yadav','Sana Khan'];
-export type Complaint = {id:string; title:string; category:string; district:string; address:string; citizen:string; priority:string; status:string; officer:string; createdAt:string; updatedAt:string; resolvedAt:string|null; resolution:string; history:{at:string; action:string; note:string}[]; version:number};
+export type Evidence = {id:string;mime:string;name:string};
+export type Complaint = {id:string; title:string; category:string; district:string; address:string; latitude?:number|null; longitude?:number|null; citizen:string; priority:string; status:string; officer:string; createdAt:string; updatedAt:string; resolvedAt:string|null; resolution:string; resolutionPhoto?:Evidence|null; history:{at:string; action:string; note:string;photo?:Evidence}[]; version:number};
 export const done = (c:Complaint) => ['Resolved','Closed'].includes(c.status);
 export const due = (c:Complaint) => new Date(c.createdAt).getTime()+7*86400000;
 export const remaining = (c:Complaint) => (due(c)-Date.now())/86400000;

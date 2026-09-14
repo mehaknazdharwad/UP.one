@@ -18,7 +18,8 @@ Use `npm run dev` for development after local migration. `npm run build` produce
 - Deadline is the original report time plus exactly seven 24-hour days. Reopening does not reset it.
 - Due within 48 hours excludes overdue and resolved/closed cases.
 - SLA compliance is completed cases resolved by their deadline divided by all completed cases in the report-created-date cohort.
-- Officer assignment is required beyond New. Resolution requires an activity note; reopening clears current resolution but retains the history.
+- Officer assignment is required beyond New. New resolutions require a note and a JPEG, PNG or WebP repair photo (maximum 5 MB). Photos are saved in private R2 storage and served only when referenced by the complaint history. Reopening clears the current resolution while retaining all historical evidence. Earlier sample resolutions are labeled when no photo exists.
+- Complaint location includes a required address and district, optional paired latitude/longitude, a map link, and an editable location section with changes recorded in history.
 - Concurrent updates return 409 rather than silently overwriting another user's work.
 - Sample data loads only through an explicit action and is idempotent.
 - User-entered text remains in its original language; interface labels switch between Hindi and English.
