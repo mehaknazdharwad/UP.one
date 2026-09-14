@@ -3,6 +3,11 @@ Object.assign(dictionary, { "Complaint location": "शिकायत का स
 Object.assign(dictionary, { "complaints": "शिकायतें", "Needs attention": "ध्यान दें", "Assign officer": "अधिकारी नियुक्त करें", "Critical first, then earliest deadline": "पहले गंभीर मामले, फिर निकटतम समय सीमा", "Same issue, same district · two or more reports": "एक ही समस्या, एक ही ज़िला · दो या अधिक शिकायतें", "No recurring patterns yet": "अभी कोई आवर्ती समस्या नहीं", "A category must appear at least twice in the same district.": "एक ही ज़िले में एक प्रकार की कम से कम दो शिकायतें आवश्यक हैं।", "Includes all complaints in each recurring group. Select a category to review its cases.": "हर आवर्ती समूह की सभी शिकायतें शामिल हैं। मामले देखने के लिए प्रकार चुनें।", "Power supply interrupted in residential area": "आवासीय क्षेत्र में बिजली आपूर्ति बाधित", "Transformer overheating near market": "बाज़ार के पास ट्रांसफॉर्मर अधिक गर्म", "Exposed electrical wire near school": "स्कूल के पास खुला विद्युत तार", "Streetlights not working on main road": "मुख्य सड़क पर स्ट्रीट लाइट बंद", "Frequent voltage fluctuations": "वोल्टेज में बार-बार उतार-चढ़ाव", "Electrical connection needs inspection": "विद्युत कनेक्शन के निरीक्षण की आवश्यकता" });
 export type Language = 'en' | 'hi';
 Object.assign(dictionary, {
+    'Anil Kumar': 'अनिल कुमार', 'Priya Singh': 'प्रिया सिंह',
+    'Rajesh Verma': 'राजेश वर्मा', 'Neha Sharma': 'नेहा शर्मा',
+    'Vikram Yadav': 'विक्रम यादव', 'Sana Khan': 'सना खान'
+});
+Object.assign(dictionary, {
     'Reporting period': 'रिपोर्ट अवधि', 'Search complaints': 'शिकायतें खोजें', 'Search ID, issue, location or officer': 'आईडी, समस्या, स्थान या अधिकारी खोजें',
     'Refresh': 'ताज़ा करें', 'Last refreshed': 'अंतिम अपडेट', 'Updating…': 'अपडेट हो रहा है…', 'Sort by': 'क्रम चुनें', 'Priority and deadline': 'प्राथमिकता और समय सीमा', 'Oldest first': 'सबसे पुरानी पहले', 'Newest first': 'सबसे नई पहले',
     'All officers': 'सभी अधिकारी', 'Clear all filters': 'सभी फ़िल्टर हटाएँ', 'Filtered results': 'फ़िल्टर किए गए परिणाम', 'Open complaint': 'शिकायत खोलें', 'Actions': 'कार्रवाई', 'Open navigation': 'नेविगेशन खोलें', 'Close navigation': 'नेविगेशन बंद करें', 'Skip to content': 'मुख्य सामग्री पर जाएँ',

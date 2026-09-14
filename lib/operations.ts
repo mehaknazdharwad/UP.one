@@ -37,7 +37,7 @@ export function matchesRisk(c: Complaint, risk: Risk, now = Date.now()) {
 }
 export function cohort(items: Complaint[], f: Filters, now: number, t: (s: string) => string) {
     const query = f.query.trim().toLocaleLowerCase();
-    return items.filter(c => (!f.district || c.district === f.district) && (f.period === 'all' || +new Date(c.createdAt) >= now - 30 * DAY) && (!query || [c.id, c.title, t(c.title), c.category, t(c.category), c.district, t(c.district), c.address, c.ward, c.zone, c.citizen, c.officer].join(' ').toLocaleLowerCase().includes(query)));
+    return items.filter(c => (!f.district || c.district === f.district) && (f.period === 'all' || +new Date(c.createdAt) >= now - 30 * DAY) && (!query || [c.id, c.title, t(c.title), c.category, t(c.category), c.district, t(c.district), c.address, c.ward, c.zone, c.citizen, c.officer, t(c.officer)].join(' ').toLocaleLowerCase().includes(query)));
 }
 export function selectComplaints(base: Complaint[], f: Filters, now: number) {
     const recurring = new Set(recurringGroups(base).filter(g => g[0].category === f.recurrence).flat().map(c => c.id));

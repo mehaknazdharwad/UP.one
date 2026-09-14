@@ -32,7 +32,7 @@ export function ComplaintTable({ rows, t, now, language, onOpen }: {
   <td data-label={t('District')}>{t(c.district)}</td>
   <td data-label={t('Created on')}><time dateTime={c.createdAt} title={new Date(c.createdAt).toLocaleString(locale(language), { timeZone: 'Asia/Kolkata' }) + ' IST'}>{new Date(c.createdAt).toLocaleDateString(locale(language), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}</time></td>
   <td data-label={t('Priority')}><span className={'severity ' + c.priority.toLowerCase()}>{t(c.priority)}</span></td>
-  <td data-label={t('Status')}><Status value={c.status} t={t}/></td><td data-label={t('Assigned officer')}>{c.officer || <button className="text-button" onClick={() => onOpen(c)}>{t('Assign officer')}</button>}</td>
+  <td data-label={t('Status')}><Status value={c.status} t={t}/></td><td data-label={t('Assigned officer')}>{t(c.officer) || <button className="text-button" onClick={() => onOpen(c)}>{t('Assign officer')}</button>}</td>
   <td className="sla-cell" data-label={t('SLA status')}><Sla c={c} now={now} t={t}/></td><td><button className="icon-button" aria-label={`${t('Open complaint')} ${c.id}`} onClick={() => onOpen(c)}><ChevronRight size={18}/></button></td>
  </tr>)}</tbody></table></div>;
 }
