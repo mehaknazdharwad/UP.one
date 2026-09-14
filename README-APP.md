@@ -35,4 +35,4 @@ Run `node scripts/test-operations.mjs` for SLA boundaries, counts, recurring gro
 
 ## GitHub
 
-Requested owner: `mehaknazd`. Repository publication is pending sign-in or repository write access for that account. The existing local GitHub account is a different identity.
+Public source repository: [mehaknazdharwad/UP.one](https://github.com/mehaknazdharwad/UP.one). The hosted demonstration retains its own access controls; publishing source does not publish stored complaints or uploaded photos.
